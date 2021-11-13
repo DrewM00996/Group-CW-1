@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Group Coursework Lab</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Vue CDN -->
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        article {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1 v-text="sitename"></h1>
+            <button>
+                {{ cartItemCount }}
+                <span class="fas fa-shopping-cart"></span> Checkout
+            </button>
+        </header>
+        <main>
+            <article>
+                <div>
+                    <figure>
+                        <img v-bind:src="lesson.image" alt="">
+                    </figure>
+                </div>
+                <div>
+                    <h2 v-text="lesson.name"></h2>
+                    <p v-text="lesson.location"></p>
+                    <p>Price: {{ lesson.price }}</p>
+                    <p v:bind="availableSpace">Number of Spaces: {{ lesson.availableSpace }}</p>
+                    <button v-on:click="addToCart" v-if="canAddToCart"> Add to Cart </button>
+                    <button disabled="disabled" v-else> Add to Cart</button>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <script type="text/javascript">
+        let lessonstore = new Vue({
+            el: '#app',
+            data: {
+                sitename: 'After School Club',
+                lesson: {
+                    code: 110,
+                    name: 'Math',
+                    location: 'London',
+                    price: '100',
+                    image: 'img/1.png',
+                    availableSpace: 5
+                },
+                cart: [],
+            },
+            methods: {
+                addToCart: function () {
+                    this.cart.push(this.lesson.code);
+                    if (this.lesson.availableSpace > 0) this.lesson.availableSpace--;
+                },
+            },
+            computed: {
+                cartItemCount() {
+                    return this.cart.length || '';
+                },
+                canAddToCart() {
+                    return this.lesson.availableSpace > 0;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
